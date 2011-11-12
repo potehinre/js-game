@@ -1,8 +1,7 @@
 var Game = function(canvas)
 {
     this.player = new Player(50,40);
-    this.walls=[];
-    this.walls.push(new Wall(0,400,200,200));
+    this.wall = new Wall(0,400,400,200);
     this.render = new Render(canvas);
     this.DIRECTIONS = {"UP":1,"DOWN":2,"RIGHT":3,"LEFT":4};
     this.KEYS = {"A":65, "W":87, "D":68, "S":83, "LEFT":37, "UP":38,"RIGHT":39, "DOWN":40};
@@ -11,36 +10,43 @@ var Game = function(canvas)
     this.FPS = 30;
 }
 
-Game.initControls = function()
+Game.prototype.initControls = function()
 {
+    self = this;
     $(window).bind("keydown",function(event)
     {
-        if(event.keyCode == this.KEYS.A)
+        if(event.keyCode == self.KEYS.A)
         {
-            this.player.moveX(-this.STEP);
+            self.player.moveX(-self.STEP);
         }
-        if(event.keyCode == this.KEYS.B)
+        if(event.keyCode == self.KEYS.D)
         {
-            this.player.moveX(this.STEP);
+            self.player.moveX(self.STEP);
         }
-        if(event.keyCode == this.KEYS.W && this.player.state == this.player.STATES.FALLING)
+        if(event.keyCode == self.KEYS.W && self.player.state == self.player.STATES.FALLING)
         {
-            this.player.impulse = this.JUMP_IMPULSE;
-            this.player.state = this.player.STATES.JUMPING;
+            self.player.impulse = self.JUMP_IMPULSE;
+            self.player.state = self.player.STATES.JUMPING;
         }
     });
 }
 
 Game.prototype.mainLoop = function()
-{   this.player.move();
-    if (this.player.boundingBox.intersectsY(wall))
+{
+    var self = this;
+    var mainloop = function()
     {
-        this.player.state=this.player.state.FALLING;
-        this.player.landed();
+        self.player.move();
+        if (self.player.boundingBox.intersectsY(self.wall.boundingBox))
+        {
+            self.player.landed();
+            self.player.gravity = 0;
+        }
+        self.render.begin();
+            self.render.draw(self.player);
+            self.render.draw(self.wall);
+        self.render.end();
+        setTimeout(mainloop,33);
     }
-    this.render.begin();
-        this.render.draw(this.player);
-        this.render.drawAll(this.walls);
-    this.render.end();
-    setTimeout(this.mainLoop, 1000 / this.FPS);
+    mainloop();
 }

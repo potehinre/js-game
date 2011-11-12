@@ -1,9 +1,9 @@
 var Render = function(canvas)
 {
     this.canvas = canvas;
-    this.context = this.canvas.get(0).getContext("2d");
-    this.canvasWidth = this.canvas.width();
-    this.canvasHeight = this.canvas.height();
+    this.context = this.canvas.getContext("2d");
+    this.canvasWidth = this.canvas.width;
+    this.canvasHeight = this.canvas.height;
     this.defaultFill = "rgb(0,0,0)";
     this.defaultStroke = "rgb(0,0,0)";
     this.COLOR = {};
@@ -29,9 +29,13 @@ Render.prototype.draw = function(object)
     }
     else if (object instanceof Wall)
     {
+        this.strokeStyle = this.COLOR.RED;
+        this.context.strokeRect(object.boundingBox.x, object.boundingBox.y,
+        object.boundingBox.width, object.boundingBox.height);
         this.context.fillStyle = this.COLOR.GREEN;
         this.context.fillRect(object.x, object.y, object.width, object.height);
         this.context.fillStyle = this.defaultFill;
+        this.context.strokeStyle = this.defaultStroke;
     }
 }
 
