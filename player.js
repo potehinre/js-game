@@ -1,50 +1,63 @@
 var Player;
 Player = function(x, y)
 {
-    this.STATES = {"JUMPING":1,"FALLING":2};
+    this.STATES = {"JUMPING":1,"FALLING":2, "LANDED":3};
     Player.superclass.constructor.apply(this, [x,y,50,50]);
-    this.boundingBox = new BoundingBox(this.x - 2, this.y - 2, this.width + 4, this.height + 4);
     this.gravity = 5;
     this.impulse = 0;
-    this.state = this.STATES.FALLING;
+    this.landedOn = null;
+    this.startFalling();
 }
 extend(Player,GameObject);
 
-Player.prototype.moveX = function(diff)
-{
-    this.x += diff;
-    this.boundingBox.x += diff;
-}
-
-Player.prototype.moveY = function(diff)
-{
-    this.y += diff;
-    this.boundingBox.y += diff;
-}
-
 Player.prototype.jump = function()
 {
-    this.moveY(-(this.gravity + this.impulse));
+    var up = this.gravity - this.impulse;
+    this.moveY(up);
     this.impulse--;
 }
 
-Player.prototype.landed = function()
+Player.prototype.landed = function(landedOn)
 {
-    this.gravity = 0;
+    this.state = this.STATES.LANDED;
+    this.impulse = this.gravity;
+    this.landedOn = landedOn;
+}
+
+Player.prototype.startFalling = function()
+{
+    this.landedOn = null;
+    this.impulse = 0;
+    this.state = this.STATES.FALLING;
+}
+
+Player.prototype.startJump = function()
+{
+    this.moveY(-10);
+    this.landedOn = null;
+    this.impulse = this.gravity * 5;
+    this.state = this.STATES.JUMPING;
 }
 
 Player.prototype.fall = function()
 {
-    this.moveY(this.gravity);
+    this.moveY(this.gravity - this.impulse);
+}
+
+Player.prototype.isJumping = function()
+{
+    if (this.state == this.STATES.JUMPING) return true;
+    return false;
 }
 
 Player.prototype.move = function()
 {
-    if (this.state == this.STATES.FALLING)
+    console.log(this.state);
+    if (this.state == this.STATES.FALLING || this.state == this.STATES.LANDED)
     {
         this.fall();
     }
-    else if (this.state == this.STATES.JUMPING)
+    if (this.state == this.STATES.JUMPING)
     {
         this.jump();
     }

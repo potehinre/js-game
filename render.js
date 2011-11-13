@@ -10,7 +10,7 @@ var Render = function(canvas)
     this.COLOR.RED = "rgb(255,0,0)";
     this.COLOR.GREEN = "rgb(0,255,0)";
     this.COLOR.BLUE = "rgb(0,0,255";
-};
+}
 
 Render.prototype.begin = function()
 {

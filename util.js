@@ -6,3 +6,4 @@ function extend(Child, Parent)
     Child.prototype.constructor = Child;
     Child.superclass = Parent.prototype;
 }
+DIRECTION = {"UP":1,"DOWN":2,"RIGHT":3,"LEFT":4};

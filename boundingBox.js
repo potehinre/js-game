@@ -19,17 +19,27 @@
     }
     BoundingBox.prototype.intersectsX = function(other)
     {
+        var left = this.x;
+        var right = this.x + this.width;
+        var othLeft = other.x;
+        var othRight = other.x + other.width;
         if (
-            (other.x >= this.x && other.x <= (this.x + this.width)) ||
-            (other.x+other.width >= this.x && other.x+other.width <= this.x +this.width)
+            ((left >= othLeft && left <= othRight) || (right >= othLeft && right <= othRight)) ||
+            ((othLeft >= left && othLeft <= right) || (othRight >= left && othRight <= right))
            )
             return true;
         return false;
     }
     BoundingBox.prototype.intersectsY = function(other)
     {
-        if ((other.y >= this.y && other.y <= (this.y + this.height)) ||
-            (other.y+other.height >= this.y && other.y+other.height <= this.y + this.height))
+        var top = this.y;
+        var bottom = this.y + this.height;
+        var othTop = other.y;
+        var othBottom = other.y + other.height;
+        if (
+            ((top >= othTop && top <= othBottom) || (bottom >= othTop && bottom <= othBottom)) ||
+            ((othTop >= top && othTop <= bottom) || (othBottom >= top && othBottom <= bottom))
+           )
             return true;
         return false;
     }
@@ -41,7 +51,7 @@
         return false;
     }
 
-    BoundingBox.prototype.intersectionSide = function(other)
+    BoundingBox.prototype.intersectionSides = function(other)
     {
         directions=[];
         if (other.x <= this.x + this.width && other.x >= this.x + (this.width/2)) directions.push(DIRECTION.RIGHT);
