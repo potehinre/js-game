@@ -2,16 +2,13 @@ var Player;
 Player = function(x, y)
 {
     this.STATES = {"JUMPING":1,"FALLING":2};
-    this.x=x;
-    this.y=y;
-    this.width = 50;
-    this.height = 50;
-    //Player.superclass.constructor.apply(this, [x,y,50,50]);
+    Player.superclass.constructor.apply(this, [x,y,50,50]);
     this.boundingBox = new BoundingBox(this.x - 2, this.y - 2, this.width + 4, this.height + 4);
     this.gravity = 5;
     this.impulse = 0;
     this.state = this.STATES.FALLING;
 }
+extend(Player,GameObject);
 
 Player.prototype.moveX = function(diff)
 {
@@ -52,4 +49,3 @@ Player.prototype.move = function()
         this.jump();
     }
 }
-//extend(Player,GameObject);
