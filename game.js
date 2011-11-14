@@ -1,6 +1,6 @@
 var Game = function(canvas)
 {
-    this.player = new Player(50,40);
+    this.player = new Player(50,200);
     this.wall = new Wall(0,400,400,200);
     this.render = new Render(canvas);
     this.KEYS = {"A":65, "W":87, "D":68, "S":83, "LEFT":37, "UP":38,"RIGHT":39, "DOWN":40};
@@ -22,7 +22,7 @@ Game.prototype.initControls = function()
         {
             self.player.moveX(self.STEP);
         }
-        if(event.keyCode == self.KEYS.W)
+        if(event.keyCode == self.KEYS.W && self.player.state != self.player.STATES.JUMPING)
         {
             self.player.startJump();
         }
@@ -46,8 +46,8 @@ Game.prototype.mainLoop = function()
                         self.player.smoothRight(intersected);
                         break;
                     case DIRECTION.DOWN:
-                            self.player.smoothDown(intersected);
                             self.player.landed();
+                            self.player.smoothDown(intersected);
                         break;
                     case DIRECTION.LEFT:
                         break;
@@ -56,7 +56,7 @@ Game.prototype.mainLoop = function()
                 }
             }
         }
-        if(self.player.state != self.player.STATES.JUMPING) self.player.startFalling();
+        if(self.player.state == self.player.STATES.FALLING) self.player.startFalling();
         self.player.move();
         self.render.begin();
             self.render.draw(self.player);

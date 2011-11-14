@@ -52,7 +52,6 @@ Player.prototype.isJumping = function()
 
 Player.prototype.move = function()
 {
-    console.log(this.state);
     if (this.state == this.STATES.FALLING || this.state == this.STATES.LANDED)
     {
         this.fall();
