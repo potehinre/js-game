@@ -53,10 +53,8 @@
 
     BoundingBox.prototype.intersectionSides = function(other)
     {
-        directions=[];
-        if (other.x <= this.x + this.width && other.x >= this.x + (this.width/2)) directions.push(DIRECTION.RIGHT);
-        else if ((other.x >= this.x) && (other.x<= this.x + (this.width/2))) directions.push(DIRECTION.LEFT);
-        else if ((other.y >= this.y) && (other.y<= this.y + (this.height/2))) directions.push(DIRECTION.UP);
-        else directions.push(DIRECTION.DOWN);
-        return directions;
+        if ((this.y >= (other.y + other.height/2)) && (this.y <= other.y + other.height))  return DIRECTION.UP;
+        if ((this.y + this.height >= other.y) && (this.y + (this.height/2) <= other.y))  return DIRECTION.DOWN;
+        if ((this.x + this.width >= other.x) && (this.x + (this.width/2) <= other.x)) return DIRECTION.RIGHT;
+        if ((this.x >= (other.x + (other.width/2))) && (this.x <= (other.x + other.width)))  return DIRECTION.LEFT;
     }

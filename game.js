@@ -1,11 +1,11 @@
 var Game = function(canvas)
 {
-    this.player = new Player(50,200);
-    this.wall = new Wall(0,400,400,200);
+    this.player = new Player(100,300);
+    this.walls = [new Wall(0,400,400,200),new Wall(400,300,100,100),new Wall(0,300,50,150)];
     this.render = new Render(canvas);
     this.KEYS = {"A":65, "W":87, "D":68, "S":83, "LEFT":37, "UP":38,"RIGHT":39, "DOWN":40};
     this.JUMP_IMPULSE = 20;
-    this.STEP = 5;
+    this.STEP = 10;
     this.FPS = 30;
 }
 
@@ -34,25 +34,33 @@ Game.prototype.mainLoop = function()
     var self = this;
     var mainloop = function()
     {
-        if (self.player.boundingBox.intersects(self.wall.boundingBox))
+        for (var j = 0;j< self.walls.length;j++)
         {
-            var intersected = self.wall.boundingBox;
-            var sides = self.player.boundingBox.intersectionSides(intersected);
-            for(var i = 0;i<sides.length;i++)
+            var curWall = self.walls[j].boundingBox;
+            if (self.player.boundingBox.intersects(curWall))
             {
-                switch (sides[i])
+                var intersected = curWall;
+                var side = self.player.boundingBox.intersectionSides(intersected);
+                switch (side)
                 {
-                    case DIRECTION.RIGHT:
-                        self.player.smoothRight(intersected);
-                        break;
-                    case DIRECTION.DOWN:
+                        case DIRECTION.UP:
+                            console.log("UP");
+                            self.player.startFalling();
+                            self.player.smoothUp(intersected);
+                            break;
+                        case DIRECTION.RIGHT:
+                            console.log("RIGHT WITH:"+j);
+                            self.player.smoothRight(intersected);
+                            break;
+                        case DIRECTION.LEFT:
+                            console.log("LEFT WITH" + j);
+                            self.player.smoothLeft(intersected);
+                            break;
+                        case DIRECTION.DOWN:
+                            console.log("DOWN WITH:"+j);
                             self.player.landed();
                             self.player.smoothDown(intersected);
-                        break;
-                    case DIRECTION.LEFT:
-                        break;
-                    case DIRECTION.UP:
-                        break;
+                            break;
                 }
             }
         }
@@ -60,7 +68,7 @@ Game.prototype.mainLoop = function()
         self.player.move();
         self.render.begin();
             self.render.draw(self.player);
-            self.render.draw(self.wall);
+            self.render.drawAll(self.walls);
         self.render.end();
         setTimeout(mainloop,33);
     }
