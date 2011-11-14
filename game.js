@@ -34,6 +34,7 @@ Game.prototype.mainLoop = function()
     var self = this;
     var mainloop = function()
     {
+        var landed = false;
         for (var j = 0;j< self.walls.length;j++)
         {
             var curWall = self.walls[j].boundingBox;
@@ -57,6 +58,7 @@ Game.prototype.mainLoop = function()
                             self.player.smoothLeft(intersected);
                             break;
                         case DIRECTION.DOWN:
+                            landed = true;
                             console.log("DOWN WITH:"+j);
                             self.player.landed();
                             self.player.smoothDown(intersected);
@@ -64,7 +66,7 @@ Game.prototype.mainLoop = function()
                 }
             }
         }
-        if(self.player.state == self.player.STATES.FALLING) self.player.startFalling();
+        if(!landed && self.player.state != self.player.STATES.JUMPING) self.player.startFalling();
         self.player.move();
         self.render.begin();
             self.render.draw(self.player);
