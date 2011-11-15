@@ -7,6 +7,7 @@ var Game = function(canvas)
     this.JUMP_IMPULSE = 20;
     this.STEP = 10;
     this.FPS = 30;
+    this.pressed = {"A":false,"W":false,"D":false,"S":false};
 }
 
 Game.prototype.initControls = function()
@@ -16,16 +17,22 @@ Game.prototype.initControls = function()
     {
         if(event.keyCode == self.KEYS.A)
         {
-            self.player.moveX(-self.STEP);
+            self.pressed.A = true;
         }
         if(event.keyCode == self.KEYS.D)
         {
-            self.player.moveX(self.STEP);
+            self.pressed.D = true;
         }
-        if(event.keyCode == self.KEYS.W && self.player.state != self.player.STATES.JUMPING)
+        if(event.keyCode == self.KEYS.W)
         {
-            self.player.startJump();
+            self.pressed.W = true;
         }
+    });
+    $(window).bind("keyup",function(event)
+    {
+        if(event.keyCode == self.KEYS.A) self.pressed.A = false;
+        if(event.keyCode == self.KEYS.D) self.pressed.D = false;
+        if(event.keyCode == self.KEYS.W) self.pressed.W = false;
     });
 }
 
@@ -34,6 +41,9 @@ Game.prototype.mainLoop = function()
     var self = this;
     var mainloop = function()
     {
+        if (self.pressed.A) self.player.moveX(-self.STEP);
+        if (self.pressed.D) self.player.moveX(self.STEP);
+        if (self.pressed.W && self.player.state!=self.player.STATES.JUMPING) self.player.startJump();
         var landed = false;
         for (var j = 0;j< self.walls.length;j++)
         {
@@ -44,7 +54,7 @@ Game.prototype.mainLoop = function()
                 var side = self.player.boundingBox.intersectionSides(intersected);
                 switch (side)
                 {
-                        case DIRECTION.UP:
+                        case DIRECTION.UP && self.player.state == self.player.STATES.JUMPING:
                             console.log("UP");
                             self.player.startFalling();
                             self.player.smoothUp(intersected);
