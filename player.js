@@ -49,6 +49,16 @@ Player.prototype.isJumping = function()
     return this.state == this.STATES.JUMPING
 }
 
+Player.prototype.isLanded = function()
+{
+    return this.state == this.STATES.LANDED;
+}
+
+Player.prototype.isFalling = function()
+{
+    return this.state == this.STATES.FALLING;
+}
+
 Player.prototype.move = function()
 {
     if (this.state == this.STATES.FALLING || this.state == this.STATES.LANDED)

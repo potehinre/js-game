@@ -1,7 +1,7 @@
 var Game = function(canvas)
 {
     this.player = new Player(100,300);
-    this.walls = [new Wall(0,400,400,200),new Wall(400,300,100,100),new Wall(0,300,50,150)];
+    this.walls = [new Wall(0,400,400,200),new Wall(400,270,100,100),new Wall(10,250,100,130)];
     this.render = new Render(canvas);
     this.KEYS = {"A":65, "W":87, "D":68, "S":83, "LEFT":37, "UP":38,"RIGHT":39, "DOWN":40};
     this.JUMP_IMPULSE = 20;
@@ -51,28 +51,35 @@ Game.prototype.mainLoop = function()
             if (self.player.boundingBox.intersects(curWall))
             {
                 var intersected = curWall;
-                var side = self.player.boundingBox.intersectionSides(intersected);
-                switch (side)
+                var sides = self.player.boundingBox.intersectionSides(intersected);
+                var downOrUp = sides[0];
+                var leftOrRight = sides[1];
+                if (downOrUp == DIRECTION.UP  && self.player.isJumping())
                 {
-                        case DIRECTION.UP && self.player.state == self.player.STATES.JUMPING:
-                            console.log("UP");
-                            self.player.startFalling();
-                            self.player.smoothUp(intersected);
-                            break;
-                        case DIRECTION.RIGHT:
-                            console.log("RIGHT WITH:"+j);
-                            self.player.smoothRight(intersected);
-                            break;
-                        case DIRECTION.LEFT:
-                            console.log("LEFT WITH" + j);
-                            self.player.smoothLeft(intersected);
-                            break;
-                        case DIRECTION.DOWN:
-                            landed = true;
-                            console.log("DOWN WITH:"+j);
-                            self.player.landed();
-                            self.player.smoothDown(intersected);
-                            break;
+                      console.log("UP IN A JUMP");
+                      self.player.startFalling();
+                      self.player.smoothUp(intersected);
+                }
+                if (downOrUp == DIRECTION.DOWN)
+                {
+                     landed = true;
+                     console.log("DOWN WITH:"+j);
+                     self.player.landed(intersected);
+                     self.player.smoothDown(intersected);
+                }
+                if (leftOrRight == DIRECTION.LEFT)  console.log("LEFT WITH" + j);
+                if (leftOrRight == DIRECTION.RIGHT) console.log("RIGHT WITH" +j);
+                if (leftOrRight == DIRECTION.LEFT &&
+                    (self.player.landedOn != intersected || self.player.isJumping() || self.player.isFalling()))
+                {
+                     console.log("Collision LEFT with" +j);
+                     self.player.smoothLeft(intersected);
+                }
+                if (leftOrRight == DIRECTION.RIGHT &&
+                    (self.player.landedOn != intersected || self.player.isJumping() || self.player.isFalling()))
+                {
+                     console.log("Collision RIGHT with" +j);
+                     self.player.smoothRight(intersected);
                 }
             }
         }
@@ -82,7 +89,7 @@ Game.prototype.mainLoop = function()
             self.render.draw(self.player);
             self.render.drawAll(self.walls);
         self.render.end();
-        setTimeout(mainloop,33);
+        setTimeout(mainloop,300);
     }
     mainloop();
 }
