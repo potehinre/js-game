@@ -5,7 +5,7 @@
         this.width = width;
         this.height = height;
         this.MAX_INTERSECTION_X = 20;
-        this.MAX_INTERSECTION_Y = 20;
+        this.MAX_INTERSECTION_Y = 30;
     }
     BoundingBox.prototype.intersectsWith = function(boundingBoxes)
     {

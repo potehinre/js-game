@@ -1,11 +1,12 @@
 var Player;
 Player = function(x, y)
 {
-    this.STATES = {"JUMPING":1,"FALLING":2, "LANDED":3};
+    this.STATES = {"JUMPING":1,"FALLING":2, "LANDED":3, "CLIMBING":4};
     Player.superclass.constructor.apply(this, [x,y,50,50]);
     this.gravity = 5;
     this.impulse = 0;
     this.landedOn = null;
+    this.climbedOn = null;
     this.startFalling();
     this.NORMAL_JUMP_MULTIPILER = 3;
     this.TRAMPOLINE_JUMP_MULTIPILER = 5;
@@ -25,11 +26,20 @@ Player.prototype.landed = function(landedOn)
     this.state = this.STATES.LANDED;
     this.impulse = this.gravity;
     this.landedOn = landedOn;
+    this.climbedOn = null;
+}
+
+Player.prototype.climbOn = function(climbedOn)
+{
+    this.state = this.STATES.CLIMBING;
+    this.climbedOn = climbedOn;
+    this.impulse = this.gravity;
 }
 
 Player.prototype.startFalling = function()
 {
     this.landedOn = null;
+    this.climbedOn = null;
     this.impulse = 0;
     this.state = this.STATES.FALLING;
 }
@@ -51,10 +61,13 @@ Player.prototype.jump = function()
     this.impulse--;
 }
 
+Player.prototype.climb = function()
+{
+    this.moveY(this.gravity - this.impulse);
+}
 
 Player.prototype.fall = function()
 {
-    console.log(this.impulse);
     this.moveY(this.gravity - this.impulse);
     this.impulse--;
 }
@@ -74,14 +87,15 @@ Player.prototype.isFalling = function()
     return this.state == this.STATES.FALLING;
 }
 
+Player.prototype.isClimbing = function()
+{
+    return this.state == this.STATES.CLIMBING;
+}
+
 Player.prototype.move = function()
 {
-    if (this.state == this.STATES.FALLING || this.state == this.STATES.LANDED)
-    {
-        this.fall();
-    }
-    if (this.state == this.STATES.JUMPING)
-    {
-        this.jump();
-    }
+    console.log("Current state:" + this.state);
+    if (this.isFalling() || this.isLanded())  this.fall();
+    else if (this.isJumping())   this.jump();
+    else if (this.isClimbing())  this.climb();
 }

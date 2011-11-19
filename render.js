@@ -10,6 +10,7 @@ var Render = function(canvas)
     this.COLOR.RED = "rgb(255,0,0)";
     this.COLOR.GREEN = "rgb(0,255,0)";
     this.COLOR.BLUE = "rgb(0,0,255)";
+    this.COLOR.GREY = "rgb(125,125,125)";
 }
 
 Render.prototype.begin = function()
@@ -40,6 +41,12 @@ Render.prototype.draw = function(object)
     else if (object instanceof Trampoline)
     {
         this.context.fillStyle = this.COLOR.BLUE;
+        this.context.fillRect(object.x,object.y,object.width,object.height);
+        this.context.fillStyle = this.defaultFill;
+    }
+    else if (object instanceof Ladder)
+    {
+        this.context.fillStyle = this.COLOR.GREY;
         this.context.fillRect(object.x,object.y,object.width,object.height);
         this.context.fillStyle = this.defaultFill;
     }
