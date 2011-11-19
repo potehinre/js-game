@@ -1,7 +1,8 @@
 var Game = function(canvas)
 {
     this.player = new Player(100,300);
-    this.walls = [new Wall(0,400,400,200),new Wall(400,270,100,100),new Wall(10,250,100,130)];
+    this.walls = [new Wall(0,400,400,200),new Wall(400,270,100,100),new Wall(10,250,100,130),
+                  new Wall(100,200,100,100)];
     this.render = new Render(canvas);
     this.KEYS = {"A":65, "W":87, "D":68, "S":83, "LEFT":37, "UP":38,"RIGHT":39, "DOWN":40};
     this.JUMP_IMPULSE = 20;
@@ -54,6 +55,7 @@ Game.prototype.mainLoop = function()
                 var sides = self.player.boundingBox.intersectionSides(intersected);
                 var downOrUp = sides[0];
                 var leftOrRight = sides[1];
+                console.log("SIDES" + sides.length + "VAL:" + sides);
                 if (downOrUp == DIRECTION.UP  && self.player.isJumping())
                 {
                       console.log("UP IN A JUMP");
@@ -67,8 +69,10 @@ Game.prototype.mainLoop = function()
                      self.player.landed(intersected);
                      self.player.smoothDown(intersected);
                 }
-                if (leftOrRight == DIRECTION.LEFT)  console.log("LEFT WITH" + j);
-                if (leftOrRight == DIRECTION.RIGHT) console.log("RIGHT WITH" +j);
+                /*if (leftOrRight == DIRECTION.LEFT)  console.log("LEFT WITH" + j + " " + self.player.state);
+                if (leftOrRight == DIRECTION.RIGHT) console.log("RIGHT WITH" +j + " " + self.player.state);
+                if (downOrUp == DIRECTION.DOWN)     console.log("DOWN WITH" + j + " " + self.player.state);
+                if (downOrUp == DIRECTION.UP)       console.log("DOWN WITH" +j + " " + self.player.state);*/
                 if (leftOrRight == DIRECTION.LEFT &&
                     (self.player.landedOn != intersected || self.player.isJumping() || self.player.isFalling()))
                 {
@@ -89,7 +93,7 @@ Game.prototype.mainLoop = function()
             self.render.draw(self.player);
             self.render.drawAll(self.walls);
         self.render.end();
-        setTimeout(mainloop,300);
+        setTimeout(mainloop,33);
     }
     mainloop();
 }

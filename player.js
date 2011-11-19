@@ -35,7 +35,7 @@ Player.prototype.startJump = function()
 {
     this.moveY(-10);
     this.landedOn = null;
-    this.impulse = this.gravity * 5;
+    this.impulse = this.gravity * 3;
     this.state = this.STATES.JUMPING;
 }
 

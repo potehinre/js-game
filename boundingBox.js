@@ -10,7 +10,7 @@
         result = [];
         for(var i = 0; i < boudingBoxes.length; i++)
         {
-            if (boundingBoxes[i].intersects(this))
+            if (this.intersects(boundingBoxes[i]))
             {
                 result.push(boundingBoxes[i]);
             }
@@ -47,10 +47,10 @@
 
     BoundingBox.prototype.intersectionSides = function(other)
     {
-        var directions = [];
-        if ((this.y >= (other.y + other.height/2)) && (this.y <= other.y + other.height))  directions.push(DIRECTION.UP);
-        else if ((this.y + this.height >= other.y) && (this.y + (this.height/2) <= other.y))    directions.push(DIRECTION.DOWN);
-        if ((this.x + this.width >= other.x) && (this.x + (this.width/2) <= other.x))      directions.push(DIRECTION.RIGHT);
-        else if ((this.x >= (other.x + (other.width/2))) && (this.x <= (other.x + other.width))) directions.push(DIRECTION.LEFT);
-        return directions;
+        var upOrDown,rightOrLeft;
+        if ((this.y >= (other.y + other.height/2)) && (this.y <= other.y + other.height))  upOrDown=DIRECTION.UP;
+        else if ((this.y + this.height >= other.y) && (this.y + (this.height/2) <= other.y))    upOrDown=DIRECTION.DOWN;
+        if ((this.x + this.width >= other.x) && (this.x + (this.width/2) <= other.x))      rightOrLeft=DIRECTION.RIGHT;
+        else if ((this.x >= (other.x + (other.width/2))) && (this.x <= (other.x + other.width))) rightOrLeft=DIRECTION.LEFT;
+        return [upOrDown,rightOrLeft];
     }
