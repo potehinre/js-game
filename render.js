@@ -9,7 +9,7 @@ var Render = function(canvas)
     this.COLOR = {};
     this.COLOR.RED = "rgb(255,0,0)";
     this.COLOR.GREEN = "rgb(0,255,0)";
-    this.COLOR.BLUE = "rgb(0,0,255";
+    this.COLOR.BLUE = "rgb(0,0,255)";
 }
 
 Render.prototype.begin = function()
@@ -36,6 +36,12 @@ Render.prototype.draw = function(object)
         this.context.fillRect(object.x, object.y, object.width, object.height);
         this.context.fillStyle = this.defaultFill;
         this.context.strokeStyle = this.defaultStroke;
+    }
+    else if (object instanceof Trampoline)
+    {
+        this.context.fillStyle = this.COLOR.BLUE;
+        this.context.fillRect(object.x,object.y,object.width,object.height);
+        this.context.fillStyle = this.defaultFill;
     }
 }
 

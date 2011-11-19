@@ -4,6 +4,8 @@
         this.y = y;
         this.width = width;
         this.height = height;
+        this.MAX_INTERSECTION_X = 20;
+        this.MAX_INTERSECTION_Y = 20;
     }
     BoundingBox.prototype.intersectsWith = function(boundingBoxes)
     {
@@ -48,9 +50,9 @@
     BoundingBox.prototype.intersectionSides = function(other)
     {
         var upOrDown,rightOrLeft;
-        if ((this.y >= (other.y + other.height/2)) && (this.y <= other.y + other.height))  upOrDown=DIRECTION.UP;
-        else if ((this.y + this.height >= other.y) && (this.y + (this.height/2) <= other.y))    upOrDown=DIRECTION.DOWN;
-        if ((this.x + this.width >= other.x) && (this.x + (this.width/2) <= other.x))      rightOrLeft=DIRECTION.RIGHT;
-        else if ((this.x >= (other.x + (other.width/2))) && (this.x <= (other.x + other.width))) rightOrLeft=DIRECTION.LEFT;
+        if (this.y >= (other.y + other.height - this.MAX_INTERSECTION_Y) && (this.y <= other.y + other.height))  upOrDown=DIRECTION.UP;
+        else if ((this.y + this.height >= other.y) && (this.y + this.height <= other.y + this.MAX_INTERSECTION_Y))    upOrDown=DIRECTION.DOWN;
+        if ((this.x + this.width >= other.x) && (this.x + this.width <= other.x + this.MAX_INTERSECTION_X))      rightOrLeft=DIRECTION.RIGHT;
+        else if ((this.x >= (other.x + other.width - this.MAX_INTERSECTION_X)) && (this.x <= (other.x + other.width))) rightOrLeft=DIRECTION.LEFT;
         return [upOrDown,rightOrLeft];
     }
