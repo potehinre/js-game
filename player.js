@@ -46,8 +46,7 @@ Player.prototype.fall = function()
 
 Player.prototype.isJumping = function()
 {
-    if (this.state == this.STATES.JUMPING) return true;
-    return false;
+    return this.state == this.STATES.JUMPING
 }
 
 Player.prototype.move = function()

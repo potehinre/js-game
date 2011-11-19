@@ -23,12 +23,10 @@
         var right = this.x + this.width;
         var othLeft = other.x;
         var othRight = other.x + other.width;
-        if (
-            ((left >= othLeft && left <= othRight) || (right >= othLeft && right <= othRight)) ||
-            ((othLeft >= left && othLeft <= right) || (othRight >= left && othRight <= right))
-           )
-            return true;
-        return false;
+        return (
+                ((left >= othLeft && left <= othRight) || (right >= othLeft && right <= othRight)) ||
+                ((othLeft >= left && othLeft <= right) || (othRight >= left && othRight <= right))
+               )
     }
     BoundingBox.prototype.intersectsY = function(other)
     {
@@ -36,25 +34,21 @@
         var bottom = this.y + this.height;
         var othTop = other.y;
         var othBottom = other.y + other.height;
-        if (
-            ((top >= othTop && top <= othBottom) || (bottom >= othTop && bottom <= othBottom)) ||
-            ((othTop >= top && othTop <= bottom) || (othBottom >= top && othBottom <= bottom))
-           )
-            return true;
-        return false;
+        return (
+                ((top >= othTop && top <= othBottom) || (bottom >= othTop && bottom <= othBottom)) ||
+                ((othTop >= top && othTop <= bottom) || (othBottom >= top && othBottom <= bottom))
+               )
     }
 
     BoundingBox.prototype.intersects = function(other)
     {
-        if (this.intersectsX(other) && this.intersectsY(other))
-            return true;
-        return false;
+        return (this.intersectsX(other) && this.intersectsY(other))
     }
 
     BoundingBox.prototype.intersectionSides = function(other)
     {
         if ((this.y >= (other.y + other.height/2)) && (this.y <= other.y + other.height))  return DIRECTION.UP;
-        if ((this.y + this.height >= other.y) && (this.y + (this.height/2) <= other.y))  return DIRECTION.DOWN;
+        else if ((this.y + this.height >= other.y) && (this.y + (this.height/2) <= other.y))  return DIRECTION.DOWN;
         if ((this.x + this.width >= other.x) && (this.x + (this.width/2) <= other.x)) return DIRECTION.RIGHT;
-        if ((this.x >= (other.x + (other.width/2))) && (this.x <= (other.x + other.width)))  return DIRECTION.LEFT;
+        else if ((this.x >= (other.x + (other.width/2))) && (this.x <= (other.x + other.width)))  return DIRECTION.LEFT;
     }
