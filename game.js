@@ -50,7 +50,7 @@ Game.prototype.mainLoop = function()
     {
         if (self.pressed.A) self.player.moveX(-self.STEP);
         if (self.pressed.D) self.player.moveX(self.STEP);
-        if (self.pressed.W && self.player.state!=self.player.STATES.JUMPING) self.player.startJump();
+        if (self.pressed.W && !self.player.isJumping() && !self.player.isFalling()) self.player.startJump();
         if (self.pressed.S && self.player.isClimbing()) self.player.moveY(self.STEP);
         var landed = false;
         var intersectedSomething = false;
