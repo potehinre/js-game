@@ -10,6 +10,7 @@ Player = function(x, y)
     this.startFalling();
     this.NORMAL_JUMP_MULTIPILER = 3;
     this.TRAMPOLINE_JUMP_MULTIPILER = 5;
+    this.STEP = 10;
 }
 extend(Player,GameObject);
 
@@ -19,6 +20,29 @@ Player.prototype.jumpWithMultipiler = function(multipiler)
     this.landedOn = null;
     this.impulse = this.gravity * multipiler;
     this.state = this.STATES.JUMPING;
+}
+
+Player.prototype.onRight = function()
+{
+ this.moveX(this.STEP);
+}
+
+Player.prototype.onLeft = function()
+{
+ this.moveX(-this.STEP);
+}
+
+Player.prototype.onDown = function()
+{
+  if (this.isClimbing()) this.moveY(self.STEP);
+}
+
+Player.prototype.onUp = function()
+{
+  if (!this.isJumping() && !this.isFalling())
+  {
+	this.startJump();
+  }
 }
 
 Player.prototype.landed = function(landedOn)
